@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { extractTextFromPDF } from "./resume.parser";
+import { extractSkills } from "./skillExtractor";
 
 export const uploadResume = async (req: Request, res: Response) => {
     try {
@@ -9,10 +10,13 @@ export const uploadResume = async (req: Request, res: Response) => {
 
         const text = await extractTextFromPDF(file.path);
 
+        const skills = extractSkills(text);
+
         res.status(500).json({ 
             message: "Resume uploaded successfully",
             filePath: file.path,
-            textPreview: text.slice(0,300)
+            textPreview: text.slice(0,300),
+            foundSkills: skills
         })
 
     } catch (error) {
