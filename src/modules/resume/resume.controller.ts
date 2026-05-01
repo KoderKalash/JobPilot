@@ -8,7 +8,7 @@ export const uploadResume = async (req: Request, res: Response) => {
         const file = req.file;
         const role = req.body.role as "backend" | "frontend"
 
-        if (!file) return res.status(400).json({ message: "No file uploaded" })
+        if (!file) return res.status(400).json({ message: "No file uploaded" });
 
         const text = await extractTextFromPDF(file.path);
 
@@ -16,12 +16,14 @@ export const uploadResume = async (req: Request, res: Response) => {
 
         const expectedSkills = ROLE_SKILLS[role];
 
+        // if(expectedSkills) return res.status(400).json({ message: "Invalid Role" })
+
         res.status(200).json({ 
             message: "Resume uploaded successfully",
             filePath: file.path,
             textPreview: text.slice(0,300),
             foundSkills: skills,
-            skillsExpected: expectedSkills
+            expectedSkills,
         })
 
     } catch (error) {

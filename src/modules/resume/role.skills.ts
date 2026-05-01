@@ -8,7 +8,9 @@ export const ROLE_SKILLS: Record<Role, string[]> = {
         "mongodb",
         "redis",
         "docker",
-        "aws"
+        "aws",
+        "javascript",
+        "typescript"
     ],
     frontend: [
         "javascript",
