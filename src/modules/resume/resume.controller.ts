@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { extractTextFromPDF } from "./resume.parser";
 import { extractSkills } from "./skillExtractor";
 import { ROLE_SKILLS } from "./role.skills";
+import { matchSkills } from "./matcher.engine";
 
 export const uploadResume = async (req: Request, res: Response) => {
     try {
@@ -15,15 +16,17 @@ export const uploadResume = async (req: Request, res: Response) => {
         const skills = extractSkills(text);
 
         const expectedSkills = ROLE_SKILLS[role];
+        if(!expectedSkills) return res.status(400).json({ message: "Invalid Role" })
 
-        // if(expectedSkills) return res.status(400).json({ message: "Invalid Role" })
+        const skillMatch = matchSkills(expectedSkills,skills);
 
         res.status(200).json({ 
             message: "Resume uploaded successfully",
             filePath: file.path,
             textPreview: text.slice(0,300),
             foundSkills: skills,
-            expectedSkills,
+            skillsExpected: expectedSkills,
+            matchScore: skillMatch
         })
 
     } catch (error) {

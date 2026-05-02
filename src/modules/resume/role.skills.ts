@@ -10,7 +10,7 @@ export const ROLE_SKILLS: Record<Role, string[]> = {
         "docker",
         "aws",
         "javascript",
-        "typescript"
+        "typescript",
     ],
     frontend: [
         "javascript",
@@ -18,6 +18,6 @@ export const ROLE_SKILLS: Record<Role, string[]> = {
         "react",
         "next.js",
         "html",
-        "css"
+        "css",
     ]
 };
