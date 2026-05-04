@@ -26,7 +26,7 @@ export const uploadResume = async (req: Request, res: Response) => {
             textPreview: text.slice(0,300),
             foundSkills: skills,
             skillsExpected: expectedSkills,
-            matchScore: skillMatch
+            report: skillMatch
         })
 
     } catch (error) {
