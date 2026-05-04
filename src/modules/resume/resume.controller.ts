@@ -3,6 +3,7 @@ import { extractTextFromPDF } from "./resume.parser";
 import { extractSkills } from "./skillExtractor";
 import { ROLE_SKILLS } from "./role.skills";
 import { matchSkills } from "./matcher.engine";
+import { generateRecommendations } from "./recommendation.engine";
 
 export const uploadResume = async (req: Request, res: Response) => {
     try {
@@ -19,6 +20,7 @@ export const uploadResume = async (req: Request, res: Response) => {
         if(!expectedSkills) return res.status(400).json({ message: "Invalid Role" })
 
         const skillMatch = matchSkills(expectedSkills,skills);
+        // const recommendations = generateRecommendations(matchSkills.missingSkills,role);
 
         res.status(200).json({ 
             message: "Resume uploaded successfully",

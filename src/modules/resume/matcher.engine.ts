@@ -1,24 +1,25 @@
-//updated implementation
+//refined implementation
 
 export const matchSkills = (expected: string[], extracted: string[]) => {
-    let matchedSkills = [];
-    let missingSkills = [];
-    
-    for (const i of expected) {
-        if (extracted.find(j => j === i)) {
-            matchedSkills.push(i);
+    const extractedSet = new Set(extracted);
+    let matchedSkills: string[] = [];
+    let missingSkills: string[] = [];
+
+    for (const skill of expected) {
+        if (extractedSet.has(skill)) {
+            matchedSkills.push(skill);
         } else {
-            missingSkills.push(i);
+            missingSkills.push(skill);
         }
 
     }
 
-    let percentMatch = (matchedSkills.length / expected.length) * 100;
+    let matchScore = expected.length === 0 ? 0 : Math.round((matchedSkills.length / expected.length) * 100);
 
     //returning structured data;
-    return{
-        matchScore: percentMatch,
+    return {
+        matchScore,
         matchedSkills,
         missingSkills,
-    }; 
+    };
 }
