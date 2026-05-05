@@ -1,4 +1,4 @@
-type Role = "backend" | "frontend";
+export type Role = "backend" | "frontend";
 
 export const ROLE_SKILLS: Record<Role, string[]> = {
     backend: [

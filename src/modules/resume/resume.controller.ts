@@ -1,37 +1,28 @@
 import { Request, Response } from "express";
-import { extractTextFromPDF } from "./resume.parser";
-import { extractSkills } from "./skillExtractor";
-import { ROLE_SKILLS } from "./role.skills";
-import { matchSkills } from "./matcher.engine";
-import { generateRecommendations } from "./recommendation.engine";
+import { processResume } from "./service/resume.service";
 
 export const uploadResume = async (req: Request, res: Response) => {
     try {
         const file = req.file;
-        const role = req.body.role as "backend" | "frontend"
+        const role = req.body.role;
+
+        if (!["backend", "frontend"].includes(role)) return res.status(400).json({ message: "Invalid Role" });
 
         if (!file) return res.status(400).json({ message: "No file uploaded" });
 
-        const text = await extractTextFromPDF(file.path);
+        const result = await processResume(file.path,role)
 
-        const skills = extractSkills(text);
-
-        const expectedSkills = ROLE_SKILLS[role];
-        if(!expectedSkills) return res.status(400).json({ message: "Invalid Role" })
-
-        const skillMatch = matchSkills(expectedSkills,skills);
-        // const recommendations = generateRecommendations(matchSkills.missingSkills,role);
-
-        res.status(200).json({ 
+        return res.status(200).json({
             message: "Resume uploaded successfully",
             filePath: file.path,
-            textPreview: text.slice(0,300),
-            foundSkills: skills,
-            skillsExpected: expectedSkills,
-            report: skillMatch
+            textPreview: result.text.slice(0, 300),
+            foundSkills: result.skills,
+            skillsExpected: result.expectedSkills,
+            report: result.skillMatch,
+            recommendations: result.recommendations
         })
 
-    } catch (error) {
-        return res.status(500).json({ message: "Upload Failed" })
+    } catch (error: any) {
+        return res.status(500).json({ message: error.message || "Internal Server Error" })
     }
 }

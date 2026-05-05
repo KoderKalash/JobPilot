@@ -4,4 +4,27 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Resume {
+  id        String     @id @default(uuid())
+  fileUrl   String
+  rawText   String
+  createdAt DateTime   @default(now())
+
+  analyses  Analysis[]
+}
+
+model Analysis {
+  id              String   @id @default(uuid())
+  resumeId        String
+  role            String
+  matchScore      Float
+  matchedSkills   String[]
+  missingSkills   String[]
+  recommendations String[]
+  createdAt       DateTime @default(now())
+
+  resume Resume @relation(fields: [resumeId], references: [id])
 }

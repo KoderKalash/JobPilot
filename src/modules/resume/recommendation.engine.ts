@@ -30,7 +30,7 @@ export const generateRecommendations = (missingSkills: string[], role: Role) => 
         if(skillsRecommended[skill]){
             recommendations.push(skillsRecommended[skill]);
         }else{
-            console.log(`Consider Learning ${skill}`)
+            recommendations.push(`Consider Learning ${skill}`)
         }
     }
 
